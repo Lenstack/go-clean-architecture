@@ -1,6 +1,8 @@
 package main
 
-import "github.com/Lenstack/clean-architecture/internal/infrastructure"
+import (
+	"github.com/Lenstack/clean-architecture/internal/infrastructure"
+)
 
 func main() {
 	logger := infrastructure.NewLogger()
