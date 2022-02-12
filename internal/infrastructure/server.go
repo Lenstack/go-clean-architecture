@@ -1,0 +1,18 @@
+package infrastructure
+
+import (
+	"github.com/Lenstack/clean-architecture/internal/middleware"
+	"github.com/Lenstack/clean-architecture/internal/usecases"
+	"github.com/gofiber/fiber/v2"
+	"os"
+)
+
+func Dispatch(logger usecases.Logger, mongo usecases.Mongo) {
+	app := fiber.New()
+	middleware.NewMiddleware(app)
+	middleware.NewRoutes(app, logger, mongo)
+
+	if err := app.Listen(":" + os.Getenv("SERVER_PORT")); err != nil {
+		logger.LogError("%s", err)
+	}
+}
