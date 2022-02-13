@@ -30,7 +30,7 @@ func (uc *UserHandler) Index(ctx *fiber.Ctx) error {
 	}
 	if len(users) == 0 {
 		return ctx.Status(fiber.StatusNotFound).JSON(
-			domain.Error{
+			domain.Response{
 				Status:  fiber.StatusNotFound,
 				Message: "Error",
 				Data:    "No Users Found.",
@@ -47,7 +47,7 @@ func (uc *UserHandler) Show(ctx *fiber.Ctx) error {
 	if err != nil {
 		if binary.Size(user) == -1 {
 			return ctx.Status(fiber.StatusNotFound).JSON(
-				domain.Error{
+				domain.Response{
 					Status:  fiber.StatusNotFound,
 					Message: "Error",
 					Data:    "No User Found.",
@@ -63,7 +63,7 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 	var body domain.User
 	if err := ctx.BodyParser(&body); err != nil {
 		return ctx.Status(fiber.StatusNotFound).JSON(
-			domain.Error{
+			domain.Response{
 				Status:  fiber.StatusNoContent,
 				Message: "Error",
 				Data:    "The User Is Not Been Created.",
@@ -73,7 +73,7 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 	_, err := uc.UserInteractor.Store(body)
 	if err != nil {
 		return ctx.Status(fiber.StatusNoContent).JSON(
-			domain.Error{
+			domain.Response{
 				Status:  fiber.StatusNoContent,
 				Message: "Error",
 				Data:    "The User Is Not Been Created.",
@@ -81,7 +81,7 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 		)
 	}
 	return ctx.Status(fiber.StatusCreated).JSON(
-		domain.Success{
+		domain.Response{
 			Status:  fiber.StatusOK,
 			Message: "Success",
 			Data:    "The User Has Been Created.",
@@ -98,7 +98,7 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 	_, err := uc.UserInteractor.Update(userId, body)
 	if err != nil {
 		return ctx.Status(fiber.StatusNotModified).JSON(
-			domain.Error{
+			domain.Response{
 				Status:  fiber.StatusNotModified,
 				Message: "Error",
 				Data:    "The User Is Not Been Updated.",
@@ -106,7 +106,7 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 		)
 	}
 	return ctx.Status(fiber.StatusOK).JSON(
-		domain.Success{
+		domain.Response{
 			Status:  fiber.StatusOK,
 			Message: "Success",
 			Data:    "The User Has Been Updated.",
@@ -119,7 +119,7 @@ func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 	_, err := uc.UserInteractor.Destroy(userId)
 	if err != nil {
 		return ctx.Status(fiber.StatusNotModified).JSON(
-			domain.Error{
+			domain.Response{
 				Status:  fiber.StatusNotModified,
 				Message: "Error",
 				Data:    "The User Is Not Been Deleted.",
@@ -127,7 +127,7 @@ func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 		)
 	}
 	return ctx.Status(fiber.StatusOK).JSON(
-		domain.Success{
+		domain.Response{
 			Status:  fiber.StatusOK,
 			Message: "Success",
 			Data:    "The User Has Been Deleted.",
