@@ -8,6 +8,10 @@ import (
 )
 
 func NewRoutes(app *fiber.App, logger usecases.Logger, mongo usecases.Mongo) {
+	UserRoutes(app, logger, mongo)
+}
+
+func UserRoutes(app *fiber.App, logger usecases.Logger, mongo usecases.Mongo) {
 	userHandler := interfaces.NewUserHandler(logger, mongo)
 	version := app.Group(os.Getenv("API_VERSION"))
 
