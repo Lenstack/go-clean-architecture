@@ -1,4 +1,4 @@
-package middleware
+package infrastructure
 
 import (
 	"github.com/Lenstack/clean-architecture/internal/interfaces"

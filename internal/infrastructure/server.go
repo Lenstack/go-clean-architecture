@@ -10,7 +10,7 @@ import (
 func Dispatch(logger usecases.Logger, mongo usecases.Mongo) {
 	app := fiber.New()
 	middleware.NewMiddleware(app)
-	middleware.NewRoutes(app, logger, mongo)
+	NewRoutes(app, logger, mongo)
 
 	if err := app.Listen(":" + os.Getenv("SERVER_PORT")); err != nil {
 		logger.LogError("%s", err)
