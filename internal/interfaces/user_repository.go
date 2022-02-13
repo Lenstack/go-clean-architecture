@@ -44,10 +44,12 @@ func (ur *UserRepository) FindById(userId string) (user domain.User, err error) 
 
 func (ur *UserRepository) Create(userData domain.User) (result interface{}, err error) {
 	var ctx = context.TODO()
-	result, err = ur.Mongo.Insert(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Interface: userData})
+	res, err := ur.Mongo.Insert(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Interface: userData})
 	if err != nil {
 		return
 	}
+
+	result = res.InsertedID
 	return result, nil
 }
 
@@ -57,11 +59,11 @@ func (ur *UserRepository) Update(userId string, userData domain.User) (result in
 	var filter = bson.D{{"_id", objectID}}
 	var update = bson.D{{"$set", userData}}
 
-	result, err = ur.Mongo.Update(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Filter: filter, Interface: update})
+	res, err := ur.Mongo.Update(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Filter: filter, Interface: update})
 	if err != nil {
 		return
 	}
-
+	result = res.ModifiedCount
 	return result, nil
 }
 
@@ -70,10 +72,11 @@ func (ur *UserRepository) Delete(userId string) (result interface{}, err error) 
 	objectID, _ := primitive.ObjectIDFromHex(userId)
 	var filter = bson.D{{"_id", objectID}}
 
-	result, err = ur.Mongo.Delete(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Filter: filter})
+	res, err := ur.Mongo.Delete(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Filter: filter})
 	if err != nil {
 		return
 	}
+	result = res.DeletedCount
 
 	return result, nil
 }
