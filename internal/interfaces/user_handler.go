@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"encoding/binary"
 	"github.com/Lenstack/clean-architecture/internal/domain"
 	"github.com/Lenstack/clean-architecture/internal/usecases"
 	"github.com/gofiber/fiber/v2"
@@ -36,28 +37,50 @@ func (uc *UserHandler) Index(ctx *fiber.Ctx) error {
 			},
 		)
 	}
-	return ctx.Status(fiber.StatusOK).JSON(users)
+	return ctx.Status(fiber.StatusFound).JSON(users)
 }
 
 func (uc *UserHandler) Show(ctx *fiber.Ctx) error {
 	userId := ctx.Params("id")
 	user, err := uc.UserInteractor.Show(userId)
+
 	if err != nil {
-		return ctx.JSON(err)
+		if binary.Size(user) == -1 {
+			return ctx.Status(fiber.StatusNotFound).JSON(
+				domain.Error{
+					Status:  fiber.StatusNotFound,
+					Message: "Error",
+					Data:    "No User Found.",
+				},
+			)
+		}
 	}
-	return ctx.JSON(user)
+
+	return ctx.Status(fiber.StatusFound).JSON(user)
 }
 
 func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 	var body domain.User
 	if err := ctx.BodyParser(&body); err != nil {
-		return ctx.JSON(err)
+		return ctx.Status(fiber.StatusNotFound).JSON(
+			domain.Error{
+				Status:  fiber.StatusNoContent,
+				Message: "Error",
+				Data:    "The User Is Not Been Created.",
+			},
+		)
 	}
 	result, err := uc.UserInteractor.Store(body)
 	if err != nil {
-		return ctx.JSON(err)
+		return ctx.Status(fiber.StatusNoContent).JSON(
+			domain.Error{
+				Status:  fiber.StatusNoContent,
+				Message: "Error",
+				Data:    "The User Is Not Been Created.",
+			},
+		)
 	}
-	return ctx.JSON(result)
+	return ctx.Status(fiber.StatusCreated).JSON(result)
 }
 
 func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
@@ -68,16 +91,28 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 	}
 	result, err := uc.UserInteractor.Update(userId, body)
 	if err != nil {
-		return ctx.JSON(err)
+		return ctx.Status(fiber.StatusNotModified).JSON(
+			domain.Error{
+				Status:  fiber.StatusNotModified,
+				Message: "Error",
+				Data:    "The User Is Not Been Updated.",
+			},
+		)
 	}
-	return ctx.JSON(result)
+	return ctx.Status(fiber.StatusOK).JSON(result)
 }
 
 func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 	userId := ctx.Params("id")
 	result, err := uc.UserInteractor.Destroy(userId)
 	if err != nil {
-		return ctx.JSON(err)
+		return ctx.Status(fiber.StatusNotModified).JSON(
+			domain.Error{
+				Status:  fiber.StatusNotModified,
+				Message: "Error",
+				Data:    "The User Is Not Been Deleted.",
+			},
+		)
 	}
-	return ctx.JSON(result)
+	return ctx.Status(fiber.StatusOK).JSON(result)
 }
