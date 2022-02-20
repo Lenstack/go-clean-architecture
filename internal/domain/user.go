@@ -19,7 +19,7 @@ type User struct {
 
 type Account struct {
 	Email    string `bson:"Email"`
-	Password string `bson:"Password"`
+	Password string `bson:"Password,omitempty"`
 	Phone    uint   `bson:"Phone"`
 	Token    string `bson:"Token"`
 	Role     Role   `bson:"Role"`

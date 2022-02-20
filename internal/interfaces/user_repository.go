@@ -4,9 +4,11 @@ import (
 	"context"
 	"github.com/Lenstack/clean-architecture/internal/domain"
 	"github.com/Lenstack/clean-architecture/internal/usecases"
+	"github.com/Lenstack/clean-architecture/internal/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"time"
 )
 
 type UserRepository struct {
@@ -44,6 +46,11 @@ func (ur *UserRepository) FindById(userId string) (user domain.User, err error) 
 
 func (ur *UserRepository) Create(userData domain.User) (result interface{}, err error) {
 	var ctx = context.TODO()
+	userData.Account.Password = utils.HashPassword(userData.Account.Password)
+	userData.Account.Role = domain.USER
+	userData.Account.Verified = false
+	userData.CreatedAt = time.Now()
+	userData.UpdatedAt = time.Now()
 	res, err := ur.Mongo.Insert(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Interface: userData})
 	if err != nil {
 		return

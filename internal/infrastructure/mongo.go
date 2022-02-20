@@ -1,8 +1,8 @@
 package infrastructure
 
 import (
-	"github.com/Lenstack/clean-architecture/internal/database"
 	"github.com/Lenstack/clean-architecture/internal/domain"
+	"github.com/Lenstack/clean-architecture/internal/infrastructure/database"
 	"github.com/Lenstack/clean-architecture/internal/usecases"
 	"go.mongodb.org/mongo-driver/mongo"
 	"os"
