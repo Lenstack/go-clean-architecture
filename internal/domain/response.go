@@ -5,3 +5,9 @@ type Response struct {
 	Message string      `json:"message"`
 	Data    interface{} `json:"data"`
 }
+
+type Error struct {
+	FailedField string
+	Tag         string
+	Value       string
+}
