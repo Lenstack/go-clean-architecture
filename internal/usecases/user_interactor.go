@@ -1,6 +1,8 @@
 package usecases
 
-import "github.com/Lenstack/clean-architecture/internal/domain"
+import (
+	"github.com/Lenstack/clean-architecture/internal/domain"
+)
 
 type UserInteractor struct {
 	UserRepository UserRepository

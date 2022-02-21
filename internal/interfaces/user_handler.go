@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"github.com/Lenstack/clean-architecture/internal/domain"
 	"github.com/Lenstack/clean-architecture/internal/usecases"
+	"github.com/Lenstack/clean-architecture/internal/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -62,24 +63,31 @@ func (uc *UserHandler) Show(ctx *fiber.Ctx) error {
 func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 	var body domain.User
 	if err := ctx.BodyParser(&body); err != nil {
-		return ctx.Status(fiber.StatusNotFound).JSON(
+		return err
+	}
+
+	errValidate := utils.ValidateStruct(body)
+	if errValidate != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(
 			domain.Response{
-				Status:  fiber.StatusNoContent,
+				Status:  fiber.StatusBadRequest,
 				Message: "Error",
-				Data:    "The User Is Not Been Created.",
+				Data:    errValidate,
 			},
 		)
 	}
+
 	_, err := uc.UserInteractor.Store(body)
 	if err != nil {
-		return ctx.Status(fiber.StatusNoContent).JSON(
+		return ctx.Status(fiber.StatusBadRequest).JSON(
 			domain.Response{
-				Status:  fiber.StatusNoContent,
+				Status:  fiber.StatusBadRequest,
 				Message: "Error",
 				Data:    "The User Is Not Been Created.",
 			},
 		)
 	}
+
 	return ctx.Status(fiber.StatusCreated).JSON(
 		domain.Response{
 			Status:  fiber.StatusOK,
@@ -87,14 +95,27 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 			Data:    "The User Has Been Created.",
 		},
 	)
+
 }
 
 func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 	userId := ctx.Params("id")
 	var body domain.User
 	if err := ctx.BodyParser(&body); err != nil {
-		return ctx.JSON(err)
+		return err
 	}
+
+	errValidate := utils.ValidateStruct(body)
+	if errValidate != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(
+			domain.Response{
+				Status:  fiber.StatusBadRequest,
+				Message: "Error",
+				Data:    errValidate,
+			},
+		)
+	}
+
 	_, err := uc.UserInteractor.Update(userId, body)
 	if err != nil {
 		return ctx.Status(fiber.StatusNotModified).JSON(
@@ -105,6 +126,7 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 			},
 		)
 	}
+
 	return ctx.Status(fiber.StatusOK).JSON(
 		domain.Response{
 			Status:  fiber.StatusOK,
@@ -116,6 +138,7 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 
 func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 	userId := ctx.Params("id")
+	
 	_, err := uc.UserInteractor.Destroy(userId)
 	if err != nil {
 		return ctx.Status(fiber.StatusNotModified).JSON(
@@ -126,6 +149,7 @@ func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 			},
 		)
 	}
+
 	return ctx.Status(fiber.StatusOK).JSON(
 		domain.Response{
 			Status:  fiber.StatusOK,
