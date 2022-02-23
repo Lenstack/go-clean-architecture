@@ -46,18 +46,19 @@ func (ur *UserRepository) FindById(userId string) (user domain.User, err error) 
 
 func (ur *UserRepository) Create(userData domain.User) (result interface{}, err error) {
 	var ctx = context.TODO()
+	token, _ := utils.GenerateToken(userData.Account.Email)
 	userData.Account.Password = utils.HashPassword(userData.Account.Password)
 	userData.Account.Role = domain.USER
 	userData.Account.Verified = false
 	userData.CreatedAt = time.Now()
 	userData.UpdatedAt = time.Now()
-	res, err := ur.Mongo.Insert(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Interface: userData})
+
+	_, err = ur.Mongo.Insert(domain.Mongo{Context: ctx, CollectionName: domain.UserCollectionName, Interface: userData})
 	if err != nil {
 		return
 	}
 
-	result = res.InsertedID
-	return result, nil
+	return token, nil
 }
 
 func (ur *UserRepository) Update(userId string, userData domain.User) (result interface{}, err error) {

@@ -77,7 +77,7 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 		)
 	}
 
-	_, err := uc.UserInteractor.Store(body)
+	response, err := uc.UserInteractor.Store(body)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(
 			domain.Response{
@@ -92,7 +92,7 @@ func (uc *UserHandler) Create(ctx *fiber.Ctx) error {
 		domain.Response{
 			Status:  fiber.StatusOK,
 			Message: "Success",
-			Data:    "The User Has Been Created.",
+			Data:    response,
 		},
 	)
 
@@ -138,7 +138,7 @@ func (uc *UserHandler) Update(ctx *fiber.Ctx) error {
 
 func (uc *UserHandler) Destroy(ctx *fiber.Ctx) error {
 	userId := ctx.Params("id")
-	
+
 	_, err := uc.UserInteractor.Destroy(userId)
 	if err != nil {
 		return ctx.Status(fiber.StatusNotModified).JSON(
