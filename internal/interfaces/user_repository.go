@@ -50,6 +50,7 @@ func (ur *UserRepository) Create(userData domain.User) (result interface{}, err 
 	userData.Account.Password = utils.HashPassword(userData.Account.Password)
 	userData.Account.Role = domain.USER
 	userData.Account.Verified = false
+	userData.Account.Token = token
 	userData.CreatedAt = time.Now()
 	userData.UpdatedAt = time.Now()
 

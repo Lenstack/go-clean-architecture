@@ -9,10 +9,12 @@ import (
 
 var SecretKey = []byte(os.Getenv("JWT_SECRET"))
 
-func RouteProtected() func(*fiber.Ctx) error {
+func RouteProtected() fiber.Handler {
 	config := jwtware.Config{
-		SigningKey:   SecretKey,
-		ErrorHandler: Unauthorized,
+		SigningKey:     SecretKey,
+		SuccessHandler: Next,
+		ErrorHandler:   Unauthorized,
+		AuthScheme:     "Bearer",
 	}
 	return jwtware.New(config)
 }
@@ -21,8 +23,16 @@ func Unauthorized(ctx *fiber.Ctx, err error) error {
 	return ctx.Status(fiber.StatusUnauthorized).JSON(
 		domain.Response{
 			Status:  fiber.StatusUnauthorized,
-			Message: "Authentication Error",
+			Message: "Authorization Error",
 			Data:    err.Error(),
 		},
 	)
+}
+
+func Next(ctx *fiber.Ctx) error {
+	err := ctx.Next()
+	if err != nil {
+		return err
+	}
+	return nil
 }
