@@ -1,6 +1,6 @@
 package usecases
 
-type Logger interface {
+type LoggerRepository interface {
 	LogError(string, ...interface{})
 	LogAccess(string, ...interface{})
 }

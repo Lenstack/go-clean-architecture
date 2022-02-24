@@ -12,7 +12,7 @@ type Mongo struct {
 	Database *mongo.Database
 }
 
-func NewMongo(logger usecases.Logger) (mongo usecases.Mongo) {
+func NewMongo(logger usecases.LoggerRepository) (mongo usecases.MongoRepository) {
 	client, ctx, err := database.MongoConnection()
 	if err != nil {
 		defer database.MongoClose(logger, client, ctx)

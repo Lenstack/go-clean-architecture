@@ -10,10 +10,10 @@ import (
 
 type UserHandler struct {
 	UserInteractor usecases.UserInteractor
-	Logger         usecases.Logger
+	Logger         usecases.LoggerRepository
 }
 
-func NewUserHandler(logger usecases.Logger, mongo usecases.Mongo) *UserHandler {
+func NewUserHandler(logger usecases.LoggerRepository, mongo usecases.MongoRepository) *UserHandler {
 	return &UserHandler{
 		UserInteractor: usecases.UserInteractor{
 			UserRepository: &UserRepository{

@@ -12,7 +12,7 @@ import (
 )
 
 type UserRepository struct {
-	Mongo usecases.Mongo
+	Mongo usecases.MongoRepository
 }
 
 func (ur *UserRepository) FindAll() (users domain.Users, err error) {

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func Load(logger usecases.Logger) {
+func Load(logger usecases.LoggerRepository) {
 	filePath := ".env"
 
 	f, err := os.Open(filePath)

@@ -8,11 +8,11 @@ import (
 	"os"
 )
 
-func NewRoutes(app *fiber.App, logger usecases.Logger, mongo usecases.Mongo) {
+func NewRoutes(app *fiber.App, logger usecases.LoggerRepository, mongo usecases.MongoRepository) {
 	UserRoutes(app, logger, mongo)
 }
 
-func UserRoutes(app *fiber.App, logger usecases.Logger, mongo usecases.Mongo) {
+func UserRoutes(app *fiber.App, logger usecases.LoggerRepository, mongo usecases.MongoRepository) {
 	userHandler := interfaces.NewUserHandler(logger, mongo)
 	version := app.Group(os.Getenv("API_VERSION"))
 

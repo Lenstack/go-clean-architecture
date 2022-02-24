@@ -18,7 +18,7 @@ type User struct {
 }
 
 type Account struct {
-	Email    string `bson:"Email" json:"Email" validate:"required"`
+	Email    string `bson:"Email" json:"Email" validate:"required,email"`
 	Password string `bson:"Password,omitempty" json:"Password" validate:"required"`
 	Phone    uint   `bson:"Phone" json:"Phone" validate:"required"`
 	Token    string `bson:"Token" json:"Token"`

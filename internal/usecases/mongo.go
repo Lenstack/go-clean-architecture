@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Mongo interface {
+type MongoRepository interface {
 	Query(domain.Mongo) (*mongo.Cursor, error)
 	FindBy(domain.Mongo) *mongo.SingleResult
 	Insert(domain.Mongo) (*mongo.InsertOneResult, error)

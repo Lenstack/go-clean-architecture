@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func Dispatch(logger usecases.Logger, mongo usecases.Mongo) {
+func Dispatch(logger usecases.LoggerRepository, mongo usecases.MongoRepository) {
 	app := fiber.New()
 	middleware.NewMiddleware(app)
 	NewRoutes(app, logger, mongo)

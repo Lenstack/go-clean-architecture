@@ -21,20 +21,20 @@ func MongoConnection() (*mongo.Client, context.Context, error) {
 	return client, ctx, err
 }
 
-func MongoPing(logger usecases.Logger, client *mongo.Client, ctx context.Context) {
+func MongoPing(logger usecases.LoggerRepository, client *mongo.Client, ctx context.Context) {
 	if err := client.Ping(ctx, readpref.Primary()); err != nil {
 		logger.LogError("%s", err)
 	}
 	logger.LogAccess("The %v Database Has Been Successfully Connected.", os.Getenv("DB_DATABASE"))
 }
 
-func MongoClose(logger usecases.Logger, client *mongo.Client, ctx context.Context) {
+func MongoClose(logger usecases.LoggerRepository, client *mongo.Client, ctx context.Context) {
 	if err := client.Disconnect(ctx); err != nil {
 		logger.LogError("%s", err)
 	}
 }
 
-func MongoListOfDatabases(logger usecases.Logger, client *mongo.Client, ctx context.Context) {
+func MongoListOfDatabases(logger usecases.LoggerRepository, client *mongo.Client, ctx context.Context) {
 	list, err := client.ListDatabases(ctx, bson.M{})
 	if err != nil {
 		logger.LogError("%s", err)
