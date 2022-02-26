@@ -10,15 +10,15 @@ import (
 func Load(logger usecases.LoggerRepository) {
 	filePath := ".env"
 
-	f, err := os.Open(filePath)
+	file, err := os.Open(filePath)
 	if err != nil {
 		logger.LogError("%s", err)
 	}
 
-	defer f.Close()
+	defer file.Close()
 
 	lines := make([]string, 0, 100)
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
@@ -28,8 +28,8 @@ func Load(logger usecases.LoggerRepository) {
 		logger.LogError("%s", err)
 	}
 
-	for _, l := range lines {
-		pair := strings.Split(l, "=")
+	for _, line := range lines {
+		pair := strings.Split(line, "=")
 		_ = os.Setenv(pair[0], pair[1])
 	}
 }
