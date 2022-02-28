@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"os"
 	"time"
 )
 
@@ -46,7 +47,8 @@ func (ur *UserRepository) FindById(userId string) (user domain.User, err error) 
 
 func (ur *UserRepository) Create(userData domain.User) (result interface{}, err error) {
 	var ctx = context.TODO()
-	token, _ := utils.GenerateToken(userData.Account.Email)
+	token, _ := utils.GenerateToken(userData.Account.Email, os.Getenv("JWT_SECRET"), os.Getenv("JWT_EXPIRATION"))
+
 	userData.Account.Password = utils.HashPassword(userData.Account.Password)
 	userData.Account.Role = domain.USER
 	userData.Account.Verified = false
