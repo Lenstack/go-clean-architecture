@@ -7,9 +7,8 @@ import (
 	"os"
 )
 
-var SecretKey = []byte(os.Getenv("JWT_SECRET"))
-
 func RouteProtected() fiber.Handler {
+	SecretKey := []byte(os.Getenv("JWT_SECRET"))
 	config := jwtware.Config{
 		SigningKey:     SecretKey,
 		SuccessHandler: Next,

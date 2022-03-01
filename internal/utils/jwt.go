@@ -2,13 +2,15 @@ package utils
 
 import (
 	"github.com/golang-jwt/jwt/v4"
+	"os"
 	"strconv"
 	"time"
 )
 
-func GenerateToken(username string, secret string, expiration string) (string, error) {
-	expirationTime, _ := strconv.Atoi(expiration)
-	secretKey := []byte(secret)
+func GenerateToken(username string) (string, error) {
+	expirationTime, _ := strconv.Atoi(os.Getenv("JWT_EXPIRATION"))
+	secretKey := []byte(os.Getenv("JWT_SECRET"))
+
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
