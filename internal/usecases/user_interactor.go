@@ -1,26 +1,26 @@
 package usecases
 
 import (
-	"github.com/Lenstack/clean-architecture/internal/domain"
+	"github.com/Lenstack/clean-architecture/internal/domain/model"
 )
 
 type UserInteractor struct {
-	UserRepository UserRepository
+	UserRepository UserService
 }
 
-func (ui *UserInteractor) Index() (domain.Users, error) {
+func (ui *UserInteractor) Index() (model.Users, error) {
 	return ui.UserRepository.FindAll()
 }
 
-func (ui *UserInteractor) Show(userId string) (domain.User, error) {
+func (ui *UserInteractor) Show(userId string) (model.User, error) {
 	return ui.UserRepository.FindById(userId)
 }
 
-func (ui *UserInteractor) Store(user domain.User) (interface{}, error) {
+func (ui *UserInteractor) Store(user model.User) (interface{}, error) {
 	return ui.UserRepository.Create(user)
 }
 
-func (ui *UserInteractor) Update(userId string, user domain.User) (interface{}, error) {
+func (ui *UserInteractor) Update(userId string, user model.User) (interface{}, error) {
 	return ui.UserRepository.Update(userId, user)
 }
 

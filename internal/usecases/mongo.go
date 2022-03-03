@@ -1,14 +1,14 @@
 package usecases
 
 import (
-	"github.com/Lenstack/clean-architecture/internal/domain"
+	"github.com/Lenstack/clean-architecture/internal/domain/entity"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type MongoRepository interface {
-	Query(domain.Mongo) (*mongo.Cursor, error)
-	FindBy(domain.Mongo) *mongo.SingleResult
-	Insert(domain.Mongo) (*mongo.InsertOneResult, error)
-	Update(domain.Mongo) (*mongo.UpdateResult, error)
-	Delete(domain.Mongo) (*mongo.DeleteResult, error)
+	Query(entity.Mongo) (*mongo.Cursor, error)
+	FindBy(entity.Mongo) *mongo.SingleResult
+	Insert(entity.Mongo) (*mongo.InsertOneResult, error)
+	Update(entity.Mongo) (*mongo.UpdateResult, error)
+	Delete(entity.Mongo) (*mongo.DeleteResult, error)
 }

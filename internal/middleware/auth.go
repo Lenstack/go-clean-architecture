@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/Lenstack/clean-architecture/internal/domain"
+	"github.com/Lenstack/clean-architecture/internal/domain/model"
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v3"
 	"os"
@@ -20,7 +20,7 @@ func RouteProtected() fiber.Handler {
 
 func Unauthorized(ctx *fiber.Ctx, err error) error {
 	return ctx.Status(fiber.StatusUnauthorized).JSON(
-		domain.Response{
+		model.Response{
 			Status:  fiber.StatusUnauthorized,
 			Message: "Authorization Error",
 			Data:    err.Error(),
